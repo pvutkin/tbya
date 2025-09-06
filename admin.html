@@ -1,0 +1,1946 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админка - Работа + Обучение</title>
+    <meta name="description" content="Административная панель для управления вакансиями и курсами">
+    
+    <!-- Preload critical fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Colors */
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #3b82f6;
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --bg-accent: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border: #e2e8f0;
+            --border-light: #f1f5f9;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            
+            /* Typography */
+            --font-base: 16px;
+            --font-sm: 14px;
+            --font-lg: 18px;
+            --font-xl: 20px;
+            --font-2xl: 24px;
+            --font-3xl: 32px;
+            
+            /* Spacing */
+            --space-xs: 0.5rem;
+            --space-sm: 1rem;
+            --space-md: 1.5rem;
+            --space-lg: 2rem;
+            --space-xl: 3rem;
+            --space-2xl: 4rem;
+            
+            /* Border radius */
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            
+            /* Transitions */
+            --transition-fast: 150ms ease-in-out;
+            --transition-normal: 250ms ease-in-out;
+            --transition-slow: 350ms ease-in-out;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: var(--font-base);
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--bg-primary);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        /* Utility Classes */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-sm);
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-xs);
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 500;
+            font-size: var(--font-base);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            white-space: nowrap;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--bg-accent);
+            border-color: var(--primary);
+        }
+        
+        .btn-danger {
+            background: var(--error);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #dc2626;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: var(--font-sm);
+        }
+        
+        .card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
+            transition: all var(--transition-normal);
+            margin-bottom: var(--space-md);
+        }
+        
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: var(--font-sm);
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .badge-primary {
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+        }
+        
+        .badge-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+        
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+        
+        .badge-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error);
+        }
+        
+        /* Header */
+        .header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-light);
+            padding: var(--space-sm) 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            font-size: var(--font-2xl);
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+        
+        .logo::before {
+            content: "🚀";
+            font-size: var(--font-xl);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: var(--space-lg);
+            list-style: none;
+        }
+        
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color var(--transition-fast);
+        }
+        
+        .nav-link:hover {
+            color: var(--primary);
+        }
+        
+        .nav-link.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: var(--space-2xl) 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero h1 {
+            font-size: var(--font-3xl);
+            font-weight: 700;
+            margin-bottom: var(--space-md);
+            line-height: 1.2;
+        }
+        
+        .hero p {
+            font-size: var(--font-lg);
+            opacity: 0.9;
+            margin-bottom: var(--space-xl);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Admin Content */
+        .admin-content {
+            padding: var(--space-xl) 0;
+        }
+        
+        .section-header {
+            margin-bottom: var(--space-lg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+        }
+        
+        .section-title {
+            font-size: var(--font-2xl);
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        .tabs {
+            display: flex;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-lg);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: var(--space-sm);
+        }
+        
+        .tab {
+            padding: var(--space-xs) var(--space-md);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-weight: 500;
+            transition: all var(--transition-fast);
+        }
+        
+        .tab.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .tab:not(.active):hover {
+            background: var(--bg-accent);
+        }
+        
+        /* Form Styles */
+        .form-group {
+            margin-bottom: var(--space-md);
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: var(--space-xs);
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: var(--font-base);
+            background: var(--bg-secondary);
+            transition: all var(--transition-fast);
+        }
+        
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-xs);
+            margin-top: var(--space-sm);
+        }
+        
+        .skill-tag {
+            background: var(--bg-accent);
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+        
+        .skill-tag .remove-skill {
+            cursor: pointer;
+            color: var(--error);
+            font-weight: bold;
+        }
+        
+        .add-skill-input {
+            display: flex;
+            gap: var(--space-xs);
+            margin-top: var(--space-sm);
+        }
+        
+        /* Data Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: var(--space-md);
+        }
+        
+        .data-table th {
+            text-align: left;
+            padding: var(--space-sm);
+            background: var(--bg-accent);
+            font-weight: 600;
+            border-bottom: 2px solid var(--border);
+        }
+        
+        .data-table td {
+            padding: var(--space-sm);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .data-table tr:hover td {
+            background: var(--bg-accent);
+        }
+        
+        .table-actions {
+            display: flex;
+            gap: var(--space-xs);
+        }
+        
+        /* Notification */
+        .notification {
+            padding: var(--space-md);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-md);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+        
+        .notification.success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+        
+        .notification.error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error);
+            color: var(--error);
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--text-primary);
+            color: white;
+            padding: var(--space-2xl) 0 var(--space-lg);
+            margin-top: var(--space-2xl);
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-xl);
+            margin-bottom: var(--space-xl);
+        }
+        
+        .footer-section h3 {
+            font-size: var(--font-lg);
+            font-weight: 600;
+            margin-bottom: var(--space-md);
+            color: white;
+        }
+        
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color var(--transition-fast);
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: var(--space-lg);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 var(--space-md);
+            }
+            
+            .hero h1 {
+                font-size: var(--font-2xl);
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .nav-links {
+                gap: var(--space-md);
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero {
+                padding: var(--space-lg) 0;
+            }
+            
+            .section-title {
+                font-size: var(--font-xl);
+            }
+        }
+        
+        /* Focus styles */
+        .btn:focus,
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">TBYA.RU</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="index.html" class="nav-link">Главная</a></li>
+                        <li><a href="#" class="nav-link active">Админка</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Административная панель</h1>
+                <p>Управление вакансиями и образовательными курсами</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admin Content -->
+    <section class="admin-content">
+        <div class="container">
+            <div class="tabs">
+                <div class="tab active" data-tab="jobs">Вакансии</div>
+                <div class="tab" data-tab="courses">Курсы</div>
+                <div class="tab" data-tab="blog">Блог</div>
+                <div class="tab" data-tab="statistics">Статистика</div>
+            </div>
+            
+            <!-- Jobs Tab -->
+            <div class="tab-content active" id="jobs-tab">
+                <div class="section-header">
+                    <h2 class="section-title">Управление вакансиями</h2>
+                    <button class="btn btn-primary" id="addJobBtn">
+                        Добавить вакансию
+                    </button>
+                </div>
+                
+                <div id="jobNotification"></div>
+                
+                <!-- Job Form (hidden by default) -->
+                <div class="card" id="jobFormContainer" style="display: none;">
+                    <div class="form-container" style="padding: var(--space-lg);">
+                        <h3 id="jobFormTitle">Добавить новую вакансию</h3>
+                        <form id="jobForm">
+                            <input type="hidden" id="jobId">
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="jobTitle">Название вакансии *</label>
+                                <input type="text" class="form-input" id="jobTitle" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="jobCompany">Компания *</label>
+                                <input type="text" class="form-input" id="jobCompany" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="jobSalary">Зарплата</label>
+                                <input type="text" class="form-input" id="jobSalary" placeholder="от 100 000 ₽">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="jobLocation">Локация *</label>
+                                <input type="text" class="form-input" id="jobLocation" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="jobWorkType">Тип работы *</label>
+                                <select class="form-select" id="jobWorkType" required>
+                                    <option value="">Выберите тип работы</option>
+                                    <option value="Офис">Офис</option>
+                                    <option value="Удалённая работа">Удалённая работа</option>
+                                    <option value="Гибрид">Гибрид</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="jobCategory">Категория *</label>
+                                <select class="form-select" id="jobCategory" required>
+                                    <option value="">Выберите категорию</option>
+                                    <option value="data">Аналитика данных</option>
+                                    <option value="it">IT</option>
+                                    <option value="design">Дизайн</option>
+                                    <option value="marketing">Маркетинг</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <input type="checkbox" id="jobHot" style="margin-right: var(--space-xs);">
+                                    Горящая вакансия
+                                </label>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="jobDescription">Описание вакансии *</label>
+                                <textarea class="form-textarea" id="jobDescription" required></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="jobRequirements">Требования</label>
+                                <textarea class="form-textarea" id="jobRequirements" placeholder="Каждое требование с новой строки"></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Ключевые навыки</label>
+                                <div id="jobSkillsContainer" class="skills-container">
+                                    <!-- Skills will be added here dynamically -->
+                                </div>
+                                <div class="add-skill-input">
+                                    <input type="text" class="form-input" id="jobSkillInput" placeholder="Добавить навык">
+                                    <button type="button" class="btn btn-secondary btn-sm" id="addJobSkillBtn">+</button>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Сохранить вакансию</button>
+                                <button type="button" class="btn btn-secondary" id="cancelJobBtn">Отмена</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Jobs List -->
+                <div class="card">
+                    <div style="padding: var(--space-lg);">
+                        <h3>Список вакансий</h3>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Название</th>
+                                    <th>Компания</th>
+                                    <th>Локация</th>
+                                    <th>Категория</th>
+                                    <th>Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody id="jobsList">
+                                <!-- Jobs will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            
+            <!-- Courses Tab -->
+            <div class="tab-content" id="courses-tab" style="display: none;">
+                <div class="section-header">
+                    <h2 class="section-title">Управление курсами</h2>
+                    <button class="btn btn-primary" id="addCourseBtn">
+                        Добавить курс
+                    </button>
+                </div>
+                
+                <div id="courseNotification"></div>
+                
+                <!-- Course Form (hidden by default) -->
+                <div class="card" id="courseFormContainer" style="display: none;">
+                    <div class="form-container" style="padding: var(--space-lg);">
+                        <h3 id="courseFormTitle">Добавить новый курс</h3>
+                        <form id="courseForm">
+                            <input type="hidden" id="courseId">
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="courseTitle">Название курса *</label>
+                                <input type="text" class="form-input" id="courseTitle" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="courseProvider">Провайдер *</label>
+                                <input type="text" class="form-input" id="courseProvider" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="coursePrice">Цена</label>
+                                <input type="text" class="form-input" id="coursePrice" placeholder="99 000 ₽">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="courseDuration">Длительность</label>
+                                <input type="text" class="form-input" id="courseDuration" placeholder="10 месяцев">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="courseLevel">Уровень</label>
+                                <select class="form-select" id="courseLevel">
+                                    <option value="">Выберите уровень</option>
+                                    <option value="Начинающий">Начинающий</option>
+                                    <option value="Средний">Средний</option>
+                                    <option value="Продвинутый">Продвинутый</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="courseCategory">Категория *</label>
+                                <select class="form-select" id="courseCategory" required>
+                                    <option value="">Выберите категорию</option>
+                                    <option value="data">Аналитика данных</option>
+                                    <option value="it">IT</option>
+                                    <option value="design">Дизайн</option>
+                                    <option value="marketing">Маркетинг</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="courseDescription">Описание курса *</label>
+                                <textarea class="form-textarea" id="courseDescription" required></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Ключевые навыки</label>
+                                <div id="courseSkillsContainer" class="skills-container">
+                                    <!-- Skills will be added here dynamically -->
+                                </div>
+                                <div class="add-skill-input">
+                                    <input type="text" class="form-input" id="courseSkillInput" placeholder="Добавить навык">
+                                    <button type="button" class="btn btn-secondary btn-sm" id="addCourseSkillBtn">+</button>
+                                </div>
+                            
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Сохранить курс</button>
+                                <button type="button" class="btn btn-secondary" id="cancelCourseBtn">Отмена</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Courses List -->
+                <div class="card">
+                    <div style="padding: var(--space-lg);">
+                        <h3>Список курсов</h3>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Название</th>
+                                    <th>Провайдер</th>
+                                    <th>Категория</th>
+                                    <th>Цена</th>
+                                    <th>Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody id="coursesList">
+                                <!-- Courses will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Blog Tab -->
+            <div class="tab-content" id="blog-tab" style="display: none;">
+                <div class="section-header">
+                    <h2 class="section-title">Управление статьями блога</h2>
+                    <button class="btn btn-primary" id="addBlogPostBtn">
+                        Добавить статью
+                    </button>
+                </div>
+                
+                <div id="blogNotification"></div>
+                
+                <!-- Blog Post Form (hidden by default) -->
+                <div class="card" id="blogPostFormContainer" style="display: none;">
+                    <div class="form-container" style="padding: var(--space-lg);">
+                        <h3 id="blogPostFormTitle">Добавить новую статью</h3>
+                        <form id="blogPostForm">
+                            <input type="hidden" id="blogPostId">
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="blogPostTitle">Заголовок *</label>
+                                <input type="text" class="form-input" id="blogPostTitle" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="blogPostExcerpt">Краткое описание *</label>
+                                <textarea class="form-textarea" id="blogPostExcerpt" required></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="blogPostContent">Полный текст статьи *</label>
+                                <textarea class="form-textarea" id="blogPostContent" required></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="blogPostAuthor">Автор *</label>
+                                <input type="text" class="form-input" id="blogPostAuthor" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="blogPostCategory">Категория *</label>
+                                <input type="text" class="form-input" id="blogPostCategory" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="blogPostDate">Дата публикации *</label>
+                                <input type="date" class="form-input" id="blogPostDate" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Сохранить статью</button>
+                                <button type="button" class="btn btn-secondary" id="cancelBlogPostBtn">Отмена</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Blog Posts List -->
+                <div class="card">
+                    <div style="padding: var(--space-lg);">
+                        <h3>Список статей</h3>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Заголовок</th>
+                                    <th>Автор</th>
+                                    <th>Категория</th>
+                                    <th>Дата</th>
+                                    <th>Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody id="blogPostsList">
+                                <!-- Blog posts will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Statistics Tab -->
+            <div class="tab-content" id="statistics-tab" style="display: none;">
+                <div class="section-header">
+                    <h2 class="section-title">Статистика</h2>
+                </div>
+                
+                <div class="card">
+                    <div style="padding: var(--space-lg);">
+                        <h3>Общая статистика</h3>
+                        <div id="statisticsContainer">
+                            <!-- Statistics will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>TBYA.RU</h3>
+                    <p>Ваш надёжный партнёр в поиске работы и профессиональном развитии</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Для соискателей</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Поиск вакансий</a></li>
+                        <li><a href="#">Резюме</a></li>
+                        <li><a href="#">Карьерные советы</a></li>
+                        <li><a href="#">Курсы</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Для работодателей</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Разместить вакансию</a></li>
+                        <li><a href="#">Поиск кандидатов</a></li>
+                        <li><a href="#">Корпоративное обучение</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Помощь</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Поддержка</a></li>
+                        <li><a href="#">Контакты</a></li>
+                    </ul>
+                </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 TBYA.RU. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Data storage using localStorage
+        const STORAGE_KEY_JOBS = 'tbya_jobs';
+        const STORAGE_KEY_COURSES = 'tbya_courses';
+        const STORAGE_KEY_BLOG_POSTS = 'tbya_blog_posts';
+        
+        // Initialize with mock data if empty
+        function initializeData() {
+            if (!localStorage.getItem(STORAGE_KEY_JOBS)) {
+                const mockJobs = [
+                    {
+                        id: 1,
+                        title: 'Аналитик данных',
+                        company: 'Т-Банк',
+                        salary: 'от 150 000 ₽',
+                        location: 'Москва',
+                        workType: 'Офис',
+                        skills: ['SQL', 'Python', 'Tableau', 'Анализ данных', 'Статистика'],
+                        description: 'Ищем аналитика данных для работы над проектами по анализу клиентского поведения и оптимизации бизнес-процессов. Вы будете работать с большими объемами данных, создавать отчеты и визуализации для принятия бизнес-решений.',
+                        requirements: ['Высшее образование в области математики, статистики или IT', 'Опыт работы с SQL и Python от 2 лет', 'Знание инструментов визуализации (Tableau, Power BI)', 'Понимание основ статистики и машинного обучения'],
+                        category: 'data'
+                    },
+                    {
+                        id: 2,
+                        title: 'Frontend-разработчик',
+                        company: 'Т-Банк',
+                        salary: 'от 180 000 ₽',
+                        location: 'СПб',
+                        workType: 'Удалённая работа',
+                        skills: ['JavaScript', 'React', 'TypeScript', 'HTML/CSS', 'Redux'],
+                        description: 'Разработка и поддержка пользовательских интерфейсов для банковских продуктов. Работа в команде с дизайнерами и backend-разработчиками над созданием современных веб-приложений.',
+                        requirements: ['Опыт работы с React от 3 лет', 'Знание TypeScript', 'Понимание принципов работы REST API', 'Опыт работы с системами контроля версий (Git)'],
+                        category: 'it'
+                    },
+                    {
+                        id: 3,
+                        title: 'UX/UI Дизайнер',
+                        company: 'Т-Банк',
+                        salary: 'от 120 000 ₽',
+                        location: 'Москва',
+                        workType: 'Гибрид',
+                        skills: ['Figma', 'Sketch', 'Прототипирование', 'User Research', 'UI Kit'],
+                        description: 'Создание удобных и интуитивных интерфейсов для цифровых продуктов банка. Проведение исследований пользователей, разработка прототипов и визуальных концепций.',
+                        requirements: ['Портфолио с примерами работ', 'Опыт в UX/UI дизайне от 2 лет', 'Знание Figma и других инструментов дизайна', 'Понимание принципов юзабилити'],
+                        category: 'design'
+                    },
+                    {
+                        id: 4,
+                        title: 'Маркетолог',
+                        company: 'Т-Банк',
+                        salary: 'от 100 000 ₽',
+                        location: 'Удалённо',
+                        workType: 'Удалённая работа',
+                        skills: ['Digital Marketing', 'SMM', 'Google Analytics', 'Контекстная реклама', 'Email-маркетинг'],
+                        description: 'Развитие digital-направления маркетинга. Создание и запуск рекламных кампаний, анализ эффективности, работа с контентом для социальных сетей.',
+                        requirements: ['Опыт в digital-маркетинге от 2 лет', 'Знание Google Analytics и рекламных кабинетов', 'Навыки работы с контентом', 'Аналитическое мышление'],
+                        category: 'marketing',
+                        hot: false
+                    },
+                    {
+                        id: 5,
+                        title: 'Backend-разработчик',
+                        company: 'Т-Банк',
+                        salary: 'от 200 000 ₽',
+                        location: 'Москва',
+                        workType: 'Офис',
+                        skills: ['Java', 'Spring', 'PostgreSQL', 'Docker', 'Kubernetes'],
+                        description: 'Разработка и поддержка серверной части банковских приложений. Работа с микросервисами, оптимизация производительности, обеспечение безопасности данных.',
+                        requirements: ['Опыт работы с Java и Spring от 3 лет', 'Знание баз данных PostgreSQL', 'Опыт работы с Docker и Kubernetes', 'Понимание принципов построения распределенных систем'],
+                        category: 'it',
+                        hot: true
+                    },
+                    {
+                        id: 6,
+                        title: 'Data Scientist',
+                        company: 'Т-Банк',
+                        salary: 'от 250 000 ₽',
+                        location: 'СПб',
+                        workType: 'Гибрид',
+                        skills: ['Python', 'Machine Learning', 'TensorFlow', 'Pandas', 'Numpy'],
+                        description: 'Разработка и внедрение моделей машинного обучения для анализа финансовых данных и прогнозирования рыночных трендов.',
+                        requirements: ['Высшее образование в области математики или IT', 'Опыт работы с Python и библиотеками ML от 2 лет', 'Знание TensorFlow/PyTorch', 'Опыт работы с большими объемами данных'],
+                        category: 'data',
+                        hot: false
+                    },
+                    {
+                        id: 7,
+                        title: 'Product Manager',
+                        company: 'Т-Банк',
+                        salary: 'от 180 000 ₽',
+                        location: 'Москва',
+                        workType: 'Офис',
+                        skills: ['Product Management', 'Agile', 'Analytics', 'Roadmap', 'Stakeholder Management'],
+                        description: 'Управление продуктовой стратегией и разработкой цифровых продуктов банка. Координация работы кросс-функциональных команд.',
+                        requirements: ['Опыт работы в роли Product Manager от 3 лет', 'Знание методологий Agile/Scrum', 'Опыт работы с аналитическими инструментами', 'Понимание финансового сектора'],
+                        category: 'it',
+                        hot: true
+                    },
+                    {
+                        id: 8,
+                        title: 'DevOps Engineer',
+                        company: 'Т-Банк',
+                        salary: 'от 220 000 ₽',
+                        location: 'Удалённо',
+                        workType: 'Удалённая работа',
+                        skills: ['AWS', 'Docker', 'Kubernetes', 'CI/CD', 'Terraform'],
+                        description: 'Построение и поддержка инфраструктуры для разработки и развертывания банковских приложений. Автоматизация процессов CI/CD.',
+                        requirements: ['Опыт работы с облачными платформами AWS от 2 лет', 'Знание Docker и Kubernetes', 'Опыт настройки CI/CD пайплайнов', 'Знание Terraform'],
+                        category: 'it',
+                        hot: false
+                    },
+                    {
+                        id: 9,
+                        title: 'Financial Analyst',
+                        company: 'Т-Банк',
+                        salary: 'от 130 000 ₽',
+                        location: 'Москва',
+                        workType: 'Офис',
+                        skills: ['Financial Modeling', 'Excel', 'Power BI', 'Risk Analysis', 'Forecasting'],
+                        description: 'Анализ финансовых показателей, подготовка отчетности и прогнозов. Оценка рисков и разработка рекомендаций по оптимизации финансовой деятельности.',
+                        requirements: ['Высшее образование в области экономики или финансов', 'Опыт финансового анализа от 2 лет', 'Знание Excel и Power BI', 'Навыки финансового моделирования'],
+                        category: 'data',
+                        hot: false
+                    },
+                    {
+                        id: 10,
+                        title: 'Content Manager',
+                        company: 'Т-Банк',
+                        salary: 'от 90 000 ₽',
+                        location: 'СПб',
+                        workType: 'Гибрид',
+                        skills: ['Content Strategy', 'Copywriting', 'SMM', 'SEO', 'Analytics'],
+                        description: 'Создание и управление контентом для цифровых каналов банка. Разработка контент-стратегии и анализ эффективности материалов.',
+                        requirements: ['Опыт работы в digital-маркетинге от 2 лет', 'Навыки копирайтинга', 'Знание принципов SEO', 'Опыт работы с аналитикой'],
+                        category: 'marketing',
+                        hot: true
+                    }
+                ];
+                localStorage.setItem(STORAGE_KEY_JOBS, JSON.stringify(mockJobs));
+            }
+            
+            if (!localStorage.getItem(STORAGE_KEY_COURSES)) {
+                const mockCourses = [
+                    {
+                        id: 1,
+                        title: 'Аналитик данных',
+                        provider: 'Яндекс Практикум',
+                        price: '99 000 ₽',
+                        duration: '10 месяцев',
+                        level: 'Начинающий',
+                        skills: ['SQL', 'Python', 'Pandas', 'Matplotlib', 'Tableau', 'Статистика', 'Машинное обучение'],
+                        description: 'Профессия аналитика данных включает в себя навыки работы с большими объемами информации, построение визуализаций и создание прогнозов. Вы освоите все необходимые инструменты для работы с данными и сможете принимать участие в реальных бизнес-проектах.',
+                        category: 'data'
+                    },
+                    {
+                        id: 2,
+                        title: 'Frontend-разработчик',
+                        provider: 'Яндекс Практикум',
+                        price: '119 000 ₽',
+                        duration: '10 месяцев',
+                        level: 'Начинающий',
+                        skills: ['HTML', 'CSS', 'JavaScript', 'React', 'TypeScript', 'Webpack', 'Git'],
+                        description: 'Курс по frontend-разработке научит создавать современные веб-приложения. Вы изучите основы веб-технологий, научитесь работать с популярными фреймворками и библиотеками, а также освоите инструменты разработки.',
+                        category: 'it'
+                    },
+                    {
+                        id: 3,
+                        title: 'UX/UI Дизайнер',
+                        provider: 'Яндекс Практикум',
+                        price: '89 000 ₽',
+                        duration: '9 месяцев',
+                        level: 'Начинающий',
+                        skills: ['Figma', 'User Research', 'Прототипирование', 'UI Kit', 'Адаптивный дизайн', 'Дизайн-системы'],
+                        description: 'Профессия UX/UI дизайнера включает в себя навыки создания удобных и красивых интерфейсов. Вы научитесь проводить исследования пользователей, создавать прототипы и визуальные концепции, а также работать с дизайн-системами.',
+                        category: 'design'
+                    },
+                    {
+                        id: 4,
+                        title: 'Интернет-маркетолог',
+                        provider: 'Яндекс Практикум',
+                        price: '79 000 ₽',
+                        duration: '8 месяцев',
+                        level: 'Начинающий',
+                        skills: ['SMM', 'Контекстная реклама', 'SEO', 'Google Analytics', 'Email-маркетинг', 'Таргетированная реклама'],
+                        description: 'Курс по интернет-маркетингу научит продвигать продукты и услуги в digital-среде. Вы освоите инструменты аналитики, научитесь создавать рекламные кампании и работать с контентом для социальных сетей.',
+                        category: 'marketing'
+                    },
+                    {
+                        id: 5,
+                        title: 'Backend-разработчик',
+                        provider: 'Яндекс Практикум',
+                        price: '129 000 ₽',
+                        duration: '12 месяцев',
+                        level: 'Начинающий',
+                        skills: ['Python', 'Django', 'FastAPI', 'PostgreSQL', 'Docker', 'Redis'],
+                        description: 'Курс по backend-разработке научит создавать серверную часть веб-приложений. Вы освоите работу с базами данных, API, контейнеризацию и другие важные технологии.',
+                        category: 'it'
+                    },
+                    {
+                        id: 6,
+                        title: 'Data Scientist',
+                        provider: 'Яндекс Практикум',
+                        price: '139 000 ₽',
+                        duration: '12 месяцев',
+                        level: 'Начинающий',
+                        skills: ['Python', 'Machine Learning', 'Deep Learning', 'TensorFlow', 'Pandas', 'Numpy'],
+                        description: 'Курс по data science научит работать с большими объемами данных, создавать модели машинного обучения и применять их для решения бизнес-задач.',
+                        category: 'data'
+                    },
+                    {
+                        id: 7,
+                        title: 'Product Manager',
+                        provider: 'Яндекс Практикум',
+                        price: '89 000 ₽',
+                        duration: '9 месяцев',
+                        level: 'Начинающий',
+                        skills: ['Product Management', 'Agile', 'Analytics', 'Roadmap', 'Stakeholder Management'],
+                        description: 'Курс по product management научит управлять продуктами, разрабатывать стратегии и координировать работу команд.',
+                        category: 'it'
+                    },
+                    {
+                        id: 8,
+                        title: 'DevOps Engineer',
+                        provider: 'Яндекс Практикум',
+                        price: '119 000 ₽',
+                        duration: '10 месяцев',
+                        level: 'Начинающий',
+                        skills: ['Linux', 'Docker', 'Kubernetes', 'CI/CD', 'AWS', 'Terraform'],
+                        description: 'Курс по DevOps научит автоматизировать процессы разработки и развертывания приложений, работать с облачными платформами и инфраструктурой.',
+                        category: 'it'
+                    },
+                    {
+                        id: 9,
+                        title: 'Финансовый аналитик',
+                        provider: 'Яндекс Практикум',
+                        price: '79 000 ₽',
+                        duration: '8 месяцев',
+                        level: 'Начинающий',
+                        skills: ['Financial Modeling', 'Excel', 'Power BI', 'Risk Analysis', 'Forecasting'],
+                        description: 'Курс по финансовому анализу научит анализировать финансовые показатели, строить модели и принимать обоснованные бизнес-решения.',
+                        category: 'data'
+                    },
+                    {
+                        id: 10,
+                        title: 'Контент-менеджер',
+                        provider: 'Яндекс Практикум',
+                        price: '69 000 ₽',
+                        duration: '6 месяцев',
+                        level: 'Начинающий',
+                        skills: ['Content Strategy', 'Copywriting', 'SMM', 'SEO', 'Analytics'],
+                        description: 'Курс по контент-менеджменту научит создавать и управлять контентом для цифровых каналов, разрабатывать стратегии и анализировать эффективность.',
+                        category: 'marketing'
+                    }
+                ];
+                localStorage.setItem(STORAGE_KEY_COURSES, JSON.stringify(mockCourses));
+            }
+            
+            if (!localStorage.getItem(STORAGE_KEY_BLOG_POSTS)) {
+                const mockBlogPosts = [
+                    {
+                        id: 1,
+                        title: 'Как составить эффективное резюме в 2025 году',
+                        excerpt: 'Актуальные советы по созданию резюме, которое привлечет внимание работодателей и поможет вам выделиться среди других кандидатов.',
+                        content: 'Полная статья о составлении резюме...',
+                        author: 'Анна Петрова',
+                        date: '2025-08-15',
+                        category: 'Карьера'
+                    },
+                    {
+                        id: 2,
+                        title: 'Топ 10 навыков, которые нужны IT-специалистам в 2025 году',
+                        excerpt: 'Какие технические и soft skills будут востребованы у IT-профессионалов в следующем году и как их развить.',
+                        content: 'Полная статья о навыках IT-специалистов...',
+                        author: 'Иван Сидоров',
+                        date: '2025-08-02',
+                        category: 'IT'
+                    },
+                    {
+                        id: 3,
+                        title: 'Где учиться профессии Data Scientist: обзор лучших курсов',
+                        excerpt: 'Сравнение различных образовательных платформ и курсов для тех, кто хочет стать специалистом по данным.',
+                        content: 'Полная статья об обучении Data Science...',
+                        author: 'Мария Козлова',
+                        date: '2025-09-01',
+                        category: 'Образование'
+                    },
+                    {
+                        id: 4,
+                        title: 'Удаленная работа: плюсы и минусы для карьерного роста',
+                        excerpt: 'Анализ влияния удаленного формата работы на профессиональное развитие и карьерные перспективы.',
+                        content: 'Полная статья об удаленной работе...',
+                        author: 'Алексей Морозов',
+                        date: '2025-08-30',
+                        category: 'Карьера'
+                    },
+                    {
+                        id: 5,
+                        title: 'Как пройти собеседование в Т-Банк: советы от рекрутеров',
+                        excerpt: 'Инсайды от HR-специалистов Т-Банка о том, как подготовиться к интервью и произвести хорошее впечатление.',
+                        content: 'Полная статья о собеседованиях в Т-Банк...',
+                        author: 'Елена Волкова',
+                        date: '2025-09-03',
+                        category: 'Карьера'
+                    },
+                    {
+                        id: 6,
+                        title: 'Финтех-образование: почему стоит учиться именно в этой сфере',
+                        excerpt: 'Обзор перспектив финтех-индустрии и преимуществ обучения по направлениям, связанным с финансами и технологиями.',
+                        content: 'Полная статья о финтех-образовании...',
+                        author: 'Дмитрий Николаев',
+                        date: '2025-08-18',
+                        category: 'Образование'
+                    }
+                ];
+                localStorage.setItem(STORAGE_KEY_BLOG_POSTS, JSON.stringify(mockBlogPosts));
+            }
+        }
+        
+        // Utility Functions
+        function sanitizeHTML(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+        
+        function showNotification(containerId, message, type) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = `
+                <div class="notification ${type}">
+                    <span>${sanitizeHTML(message)}</span>
+                </div>
+            `;
+            
+            // Auto hide after 5 seconds
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 5000);
+        }
+        
+        // Job Management Functions
+        function getJobs() {
+            return JSON.parse(localStorage.getItem(STORAGE_KEY_JOBS) || '[]');
+        }
+        
+        function saveJobs(jobs) {
+            localStorage.setItem(STORAGE_KEY_JOBS, JSON.stringify(jobs));
+        }
+        
+        function addJob(job) {
+            const jobs = getJobs();
+            job.id = Date.now(); // Simple ID generation
+            jobs.push(job);
+            saveJobs(jobs);
+            return job;
+        }
+        
+        function updateJob(updatedJob) {
+            const jobs = getJobs();
+            const index = jobs.findIndex(job => job.id === updatedJob.id);
+            if (index !== -1) {
+                jobs[index] = updatedJob;
+                saveJobs(jobs);
+                return true;
+            }
+            return false;
+        }
+        
+        function deleteJob(jobId) {
+            const jobs = getJobs();
+            const filteredJobs = jobs.filter(job => job.id !== jobId);
+            saveJobs(filteredJobs);
+        }
+        
+        // Course Management Functions
+        function getCourses() {
+            return JSON.parse(localStorage.getItem(STORAGE_KEY_COURSES) || '[]');
+        }
+        
+        function saveCourses(courses) {
+            localStorage.setItem(STORAGE_KEY_COURSES, JSON.stringify(courses));
+        }
+        
+        function addCourse(course) {
+            const courses = getCourses();
+            course.id = Date.now(); // Simple ID generation
+            courses.push(course);
+            saveCourses(courses);
+            return course;
+        }
+        
+        function updateCourse(updatedCourse) {
+            const courses = getCourses();
+            const index = courses.findIndex(course => course.id === updatedCourse.id);
+            if (index !== -1) {
+                courses[index] = updatedCourse;
+                saveCourses(courses);
+                return true;
+            }
+            return false;
+        }
+        
+        function deleteCourse(courseId) {
+            const courses = getCourses();
+            const filteredCourses = courses.filter(course => course.id !== courseId);
+            saveCourses(filteredCourses);
+        }
+        
+        // Blog Post Management Functions
+        function getBlogPosts() {
+            return JSON.parse(localStorage.getItem(STORAGE_KEY_BLOG_POSTS) || '[]');
+        }
+        
+        function saveBlogPosts(posts) {
+            localStorage.setItem(STORAGE_KEY_BLOG_POSTS, JSON.stringify(posts));
+        }
+        
+        function addBlogPost(post) {
+            const posts = getBlogPosts();
+            post.id = Date.now(); // Simple ID generation
+            posts.push(post);
+            saveBlogPosts(posts);
+            return post;
+        }
+        
+        function updateBlogPost(updatedPost) {
+            const posts = getBlogPosts();
+            const index = posts.findIndex(post => post.id === updatedPost.id);
+            if (index !== -1) {
+                posts[index] = updatedPost;
+                saveBlogPosts(posts);
+                return true;
+            }
+            return false;
+        }
+        
+        function deleteBlogPost(postId) {
+            const posts = getBlogPosts();
+            const filteredPosts = posts.filter(post => post.id !== postId);
+            saveBlogPosts(filteredPosts);
+        }
+        
+        // Statistics Functions
+        function getReferralData() {
+            return JSON.parse(localStorage.getItem('tbya_referrals') || '[]');
+        }
+        
+        function renderStatistics() {
+            const jobs = getJobs();
+            const courses = getCourses();
+            const blogPosts = getBlogPosts();
+            const referrals = getReferralData();
+            
+            // Calculate statistics
+            const totalJobs = jobs.length;
+            const totalCourses = courses.length;
+            const totalBlogPosts = blogPosts.length;
+            const hotJobs = jobs.filter(job => job.hot).length;
+            const totalReferrals = referrals.length;
+            
+            // Category distribution
+            const categoryStats = {};
+            jobs.forEach(job => {
+                categoryStats[job.category] = (categoryStats[job.category] || 0) + 1;
+            });
+            
+            // Referrals by course
+            const referralStats = {};
+            referrals.forEach(referral => {
+                referralStats[referral.courseTitle] = (referralStats[referral.courseTitle] || 0) + 1;
+            });
+            
+            // Render statistics
+            const statsContainer = document.getElementById('statisticsContainer');
+            statsContainer.innerHTML = `
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--space-lg); margin-bottom: var(--space-lg);">
+                    <div class="card" style="text-align: center; padding: var(--space-lg);">
+                        <div style="font-size: var(--font-3xl); font-weight: 700; color: var(--primary);">${totalJobs}</div>
+                        <div style="color: var(--text-secondary);">Всего вакансий</div>
+                    </div>
+                    
+                    <div class="card" style="text-align: center; padding: var(--space-lg);">
+                        <div style="font-size: var(--font-3xl); font-weight: 700; color: var(--primary);">${totalCourses}</div>
+                        <div style="color: var(--text-secondary);">Всего курсов</div>
+                    </div>
+                    
+                    <div class="card" style="text-align: center; padding: var(--space-lg);">
+                        <div style="font-size: var(--font-3xl); font-weight: 700; color: var(--primary);">${totalBlogPosts}</div>
+                        <div style="color: var(--text-secondary);">Статей в блоге</div>
+                    </div>
+                    
+                    <div class="card" style="text-align: center; padding: var(--space-lg);">
+                        <div style="font-size: var(--font-3xl); font-weight: 700; color: var(--warning);">${hotJobs}</div>
+                        <div style="color: var(--text-secondary);">Горящих вакансий</div>
+                    </div>
+                    
+                    <div class="card" style="text-align: center; padding: var(--space-lg);">
+                        <div style="font-size: var(--font-3xl); font-weight: 700; color: var(--success);">${totalReferrals}</div>
+                        <div style="color: var(--text-secondary);">Переходов по ссылкам</div>
+                    </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--space-lg);">
+                    <div class="card" style="padding: var(--space-lg);">
+                        <h4>Распределение вакансий по категориям</h4>
+                        <div id="categoryChart" style="height: 200px; display: flex; align-items: flex-end; gap: var(--space-sm); margin-top: var(--space-md);">
+                            ${Object.entries(categoryStats).map(([category, count]) => `
+                                <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
+                                    <div style="width: 100%; background: var(--primary); height: ${Math.max(20, (count / Math.max(...Object.values(categoryStats))) * 180)}px; border-radius: var(--radius-sm) 0 0 var(--radius-sm);"></div>
+                                    <div style="margin-top: var(--space-xs); text-align: center; font-size: var(--font-sm);">
+                                        <div>${category}</div>
+                                        <div style="color: var(--text-secondary);">${count}</div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div class="card" style="padding: var(--space-lg);">
+                        <h4>Топ курсов по переходам</h4>
+                        ${Object.entries(referralStats).length > 0 ? `
+                            <div style="margin-top: var(--space-md);">
+                                ${Object.entries(referralStats)
+                                    .sort((a, b) => b[1] - a[1])
+                                    .slice(0, 5)
+                                    .map(([course, count]) => `
+                                        <div style="display: flex; justify-content: space-between; margin-bottom: var(--space-sm);">
+                                            <span>${sanitizeHTML(course)}</span>
+                                            <span style="font-weight: 500;">${count}</span>
+                                        </div>
+                                        <div style="height: 6px; background: var(--bg-accent); border-radius: 3px; margin-bottom: var(--space-sm);">
+                                            <div style="height: 100%; width: ${(count / Math.max(...Object.values(referralStats))) * 100}%; background: var(--primary); border-radius: 3px;"></div>
+                                        </div>
+                                    `).join('')}
+                            </div>
+                        ` : `
+                            <div style="text-align: center; color: var(--text-secondary); padding: var(--space-lg);">
+                                Нет данных
+                            </div>
+                        `}
+                    </div>
+                </div>
+            `;
+        }
+        
+        // UI Functions
+        function renderJobsList() {
+            const jobs = getJobs();
+            const jobsList = document.getElementById('jobsList');
+            
+            if (jobs.length === 0) {
+                jobsList.innerHTML = '<tr><td colspan="5" style="text-align: center;">Нет вакансий</td></tr>';
+                return;
+            }
+            
+            jobsList.innerHTML = jobs.map(job => `
+                <tr>
+                    <td>
+                        ${sanitizeHTML(job.title)}
+                        ${job.hot ? '<span class="badge badge-warning" style="margin-left: var(--space-xs);">🔥 Горящая</span>' : ''}
+                    </td>
+                    <td>${sanitizeHTML(job.company)}</td>
+                    <td>${sanitizeHTML(job.location)}</td>
+                    <td>
+                        <span class="badge badge-primary">${sanitizeHTML(job.category)}</span>
+                    </td>
+                    <td>
+                        <div class="table-actions">
+                            <button class="btn btn-secondary btn-sm edit-job-btn" data-id="${job.id}">
+                                Редактировать
+                            </button>
+                            <button class="btn btn-danger btn-sm delete-job-btn" data-id="${job.id}">
+                                Удалить
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+            
+            // Add event listeners
+            document.querySelectorAll('.edit-job-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const jobId = parseInt(this.getAttribute('data-id'));
+                    editJob(jobId);
+                });
+            });
+            
+            document.querySelectorAll('.delete-job-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const jobId = parseInt(this.getAttribute('data-id'));
+                    if (confirm('Вы уверены, что хотите удалить эту вакансию?')) {
+                        deleteJob(jobId);
+                        renderJobsList();
+                        showNotification('jobNotification', 'Вакансия успешно удалена', 'success');
+                    }
+                });
+            });
+        }
+        
+        function renderCoursesList() {
+            const courses = getCourses();
+            const coursesList = document.getElementById('coursesList');
+            
+            if (courses.length === 0) {
+                coursesList.innerHTML = '<tr><td colspan="5" style="text-align: center;">Нет курсов</td></tr>';
+                return;
+            }
+            
+            coursesList.innerHTML = courses.map(course => `
+                <tr>
+                    <td>${sanitizeHTML(course.title)}</td>
+                    <td>${sanitizeHTML(course.provider)}</td>
+                    <td>
+                        <span class="badge badge-primary">${sanitizeHTML(course.category)}</span>
+                    </td>
+                    <td>${sanitizeHTML(course.price || 'Бесплатно')}</td>
+                    <td>
+                        <div class="table-actions">
+                            <button class="btn btn-secondary btn-sm edit-course-btn" data-id="${course.id}">
+                                Редактировать
+                            </button>
+                            <button class="btn btn-danger btn-sm delete-course-btn" data-id="${course.id}">
+                                Удалить
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+            
+            // Add event listeners
+            document.querySelectorAll('.edit-course-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const courseId = parseInt(this.getAttribute('data-id'));
+                    editCourse(courseId);
+                });
+            });
+            
+            document.querySelectorAll('.delete-course-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const courseId = parseInt(this.getAttribute('data-id'));
+                    if (confirm('Вы уверены, что хотите удалить этот курс?')) {
+                        deleteCourse(courseId);
+                        renderCoursesList();
+                        showNotification('courseNotification', 'Курс успешно удален', 'success');
+                    }
+                });
+            });
+        }
+        
+        function renderBlogPostsList() {
+            const posts = getBlogPosts();
+            const postsList = document.getElementById('blogPostsList');
+            
+            if (posts.length === 0) {
+                postsList.innerHTML = '<tr><td colspan="5" style="text-align: center;">Нет статей</td></tr>';
+                return;
+            }
+            
+            postsList.innerHTML = posts.map(post => `
+                <tr>
+                    <td>${sanitizeHTML(post.title)}</td>
+                    <td>${sanitizeHTML(post.author)}</td>
+                    <td>${sanitizeHTML(post.category)}</td>
+                    <td>${sanitizeHTML(post.date)}</td>
+                    <td>
+                        <div class="table-actions">
+                            <button class="btn btn-secondary btn-sm edit-blog-post-btn" data-id="${post.id}">
+                                Редактировать
+                            </button>
+                            <button class="btn btn-danger btn-sm delete-blog-post-btn" data-id="${post.id}">
+                                Удалить
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+            
+            // Add event listeners
+            document.querySelectorAll('.edit-blog-post-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const postId = parseInt(this.getAttribute('data-id'));
+                    editBlogPost(postId);
+                });
+            });
+            
+            document.querySelectorAll('.delete-blog-post-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const postId = parseInt(this.getAttribute('data-id'));
+                    if (confirm('Вы уверены, что хотите удалить эту статью?')) {
+                        deleteBlogPost(postId);
+                        renderBlogPostsList();
+                        showNotification('blogNotification', 'Статья успешно удалена', 'success');
+                    }
+                });
+            });
+        }
+        
+        // Job Form Functions
+        function showJobForm() {
+            document.getElementById('jobFormContainer').style.display = 'block';
+            document.getElementById('jobFormTitle').textContent = 'Добавить новую вакансию';
+            document.getElementById('jobId').value = '';
+            document.getElementById('jobForm').reset();
+            document.getElementById('jobSkillsContainer').innerHTML = '';
+        }
+        
+        function hideJobForm() {
+            document.getElementById('jobFormContainer').style.display = 'none';
+        }
+        
+        function editJob(jobId) {
+            const jobs = getJobs();
+            const job = jobs.find(j => j.id === jobId);
+            
+            if (!job) return;
+            
+            showJobForm();
+            document.getElementById('jobFormTitle').textContent = 'Редактировать вакансию';
+            document.getElementById('jobId').value = job.id;
+            document.getElementById('jobTitle').value = job.title;
+            document.getElementById('jobCompany').value = job.company;
+            document.getElementById('jobSalary').value = job.salary || '';
+            document.getElementById('jobLocation').value = job.location;
+            document.getElementById('jobWorkType').value = job.workType;
+            document.getElementById('jobCategory').value = job.category;
+            document.getElementById('jobHot').checked = job.hot || false;
+            document.getElementById('jobDescription').value = job.description;
+            document.getElementById('jobRequirements').value = job.requirements ? job.requirements.join('\n') : '';
+            
+            // Render skills
+            const skillsContainer = document.getElementById('jobSkillsContainer');
+            skillsContainer.innerHTML = '';
+            if (job.skills) {
+                job.skills.forEach(skill => {
+                    addSkillToContainer(skillsContainer, skill, 'job');
+                });
+            }
+        }
+        
+        // Blog Post Form Functions
+        function showBlogPostForm() {
+            document.getElementById('blogPostFormContainer').style.display = 'block';
+            document.getElementById('blogPostFormTitle').textContent = 'Добавить новую статью';
+            document.getElementById('blogPostId').value = '';
+            document.getElementById('blogPostForm').reset();
+        }
+        
+        function hideBlogPostForm() {
+            document.getElementById('blogPostFormContainer').style.display = 'none';
+        }
+        
+        function editBlogPost(postId) {
+            const posts = getBlogPosts();
+            const post = posts.find(p => p.id === postId);
+            
+            if (!post) return;
+            
+            showBlogPostForm();
+            document.getElementById('blogPostFormTitle').textContent = 'Редактировать статью';
+            document.getElementById('blogPostId').value = post.id;
+            document.getElementById('blogPostTitle').value = post.title;
+            document.getElementById('blogPostExcerpt').value = post.excerpt;
+            document.getElementById('blogPostContent').value = post.content;
+            document.getElementById('blogPostAuthor').value = post.author;
+            document.getElementById('blogPostCategory').value = post.category;
+            document.getElementById('blogPostDate').value = post.date;
+        }
+        
+        function addSkillToContainer(container, skill, type) {
+            const skillTag = document.createElement('div');
+            skillTag.className = 'skill-tag';
+            skillTag.innerHTML = `
+                <span>${sanitizeHTML(skill)}</span>
+                <span class="remove-skill" data-type="${type}">&times;</span>
+            `;
+            container.appendChild(skillTag);
+            
+            // Add event listener to remove button
+            skillTag.querySelector('.remove-skill').addEventListener('click', function() {
+                container.removeChild(skillTag);
+            });
+        }
+        
+        // Course Form Functions
+        function showCourseForm() {
+            document.getElementById('courseFormContainer').style.display = 'block';
+            document.getElementById('courseFormTitle').textContent = 'Добавить новый курс';
+            document.getElementById('courseId').value = '';
+            document.getElementById('courseForm').reset();
+            document.getElementById('courseSkillsContainer').innerHTML = '';
+        }
+        
+        function hideCourseForm() {
+            document.getElementById('courseFormContainer').style.display = 'none';
+        }
+        
+        function editCourse(courseId) {
+            const courses = getCourses();
+            const course = courses.find(c => c.id === courseId);
+            
+            if (!course) return;
+            
+            showCourseForm();
+            document.getElementById('courseFormTitle').textContent = 'Редактировать курс';
+            document.getElementById('courseId').value = course.id;
+            document.getElementById('courseTitle').value = course.title;
+            document.getElementById('courseProvider').value = course.provider;
+            document.getElementById('coursePrice').value = course.price || '';
+            document.getElementById('courseDuration').value = course.duration || '';
+            document.getElementById('courseLevel').value = course.level || '';
+            document.getElementById('courseCategory').value = course.category;
+            document.getElementById('courseDescription').value = course.description;
+            
+            // Render skills
+            const skillsContainer = document.getElementById('courseSkillsContainer');
+            skillsContainer.innerHTML = '';
+            if (course.skills) {
+                course.skills.forEach(skill => {
+                    addSkillToContainer(skillsContainer, skill, 'course');
+                });
+            }
+        }
+        
+        // Tab Switching
+        function switchTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.style.display = 'none';
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(`${tabName}-tab`).style.display = 'block';
+            
+            // Add active class to selected tab
+            document.querySelector(`.tab[data-tab="${tabName}"]`).classList.add('active');
+            
+            // Load statistics when switching to statistics tab
+            if (tabName === 'statistics') {
+                renderStatistics();
+            }
+        }
+        
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize data
+            initializeData();
+            
+            // Render initial data
+            renderJobsList();
+            renderCoursesList();
+            renderBlogPostsList();
+            
+            // Tab switching
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabName = this.getAttribute('data-tab');
+                    switchTab(tabName);
+                });
+            });
+            
+            // Job form events
+            document.getElementById('addJobBtn').addEventListener('click', showJobForm);
+            document.getElementById('cancelJobBtn').addEventListener('click', hideJobForm);
+            document.getElementById('addJobSkillBtn').addEventListener('click', function() {
+                const skillInput = document.getElementById('jobSkillInput');
+                const skill = skillInput.value.trim();
+                if (skill) {
+                    addSkillToContainer(document.getElementById('jobSkillsContainer'), skill, 'job');
+                    skillInput.value = '';
+                }
+            });
+            
+            document.getElementById('jobSkillInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    document.getElementById('addJobSkillBtn').click();
+                }
+            });
+            
+            document.getElementById('jobForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Collect form data
+                const jobId = document.getElementById('jobId').value;
+                const job = {
+                    title: document.getElementById('jobTitle').value,
+                    company: document.getElementById('jobCompany').value,
+                    salary: document.getElementById('jobSalary').value,
+                    location: document.getElementById('jobLocation').value,
+                    workType: document.getElementById('jobWorkType').value,
+                    category: document.getElementById('jobCategory').value,
+                    hot: document.getElementById('jobHot').checked,
+                    description: document.getElementById('jobDescription').value,
+                    requirements: document.getElementById('jobRequirements').value.split('\n').filter(r => r.trim() !== '')
+                };
+                
+                // Collect skills
+                const skills = [];
+                document.querySelectorAll('#jobSkillsContainer .skill-tag span:first-child').forEach(span => {
+                    skills.push(span.textContent);
+                });
+                job.skills = skills;
+                
+                try {
+                    if (jobId) {
+                        // Update existing job
+                        job.id = parseInt(jobId);
+                        updateJob(job);
+                        showNotification('jobNotification', 'Вакансия успешно обновлена', 'success');
+                    } else {
+                        // Add new job
+                        addJob(job);
+                        showNotification('jobNotification', 'Вакансия успешно добавлена', 'success');
+                    }
+                    
+                    // Refresh list and hide form
+                    renderJobsList();
+                    hideJobForm();
+                } catch (error) {
+                    showNotification('jobNotification', 'Ошибка при сохранении вакансии: ' + error.message, 'error');
+                }
+            });
+            
+            // Course form events
+            document.getElementById('addCourseBtn').addEventListener('click', showCourseForm);
+            document.getElementById('cancelCourseBtn').addEventListener('click', hideCourseForm);
+            document.getElementById('addCourseSkillBtn').addEventListener('click', function() {
+                const skillInput = document.getElementById('courseSkillInput');
+                const skill = skillInput.value.trim();
+                if (skill) {
+                    addSkillToContainer(document.getElementById('courseSkillsContainer'), skill, 'course');
+                    skillInput.value = '';
+                }
+            });
+            
+            document.getElementById('courseSkillInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    document.getElementById('addCourseSkillBtn').click();
+                }
+            });
+            
+            document.getElementById('courseForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Collect form data
+                const courseId = document.getElementById('courseId').value;
+                const course = {
+                    title: document.getElementById('courseTitle').value,
+                    provider: document.getElementById('courseProvider').value,
+                    price: document.getElementById('coursePrice').value,
+                    duration: document.getElementById('courseDuration').value,
+                    level: document.getElementById('courseLevel').value,
+                    category: document.getElementById('courseCategory').value,
+                    description: document.getElementById('courseDescription').value
+                };
+                
+                // Collect skills
+                const skills = [];
+                document.querySelectorAll('#courseSkillsContainer .skill-tag span:first-child').forEach(span => {
+                    skills.push(span.textContent);
+                });
+                course.skills = skills;
+                
+                try {
+                    if (courseId) {
+                        // Update existing course
+                        course.id = parseInt(courseId);
+                        updateCourse(course);
+                        showNotification('courseNotification', 'Курс успешно обновлен', 'success');
+                    } else {
+                        // Add new course
+                        addCourse(course);
+                        showNotification('courseNotification', 'Курс успешно добавлен', 'success');
+                    }
+                    
+                    // Refresh list and hide form
+                    renderCoursesList();
+                    hideCourseForm();
+                } catch (error) {
+                    showNotification('courseNotification', 'Ошибка при сохранении курса: ' + error.message, 'error');
+                }
+            });
+            
+            // Blog Post form events
+            document.getElementById('addBlogPostBtn').addEventListener('click', showBlogPostForm);
+            document.getElementById('cancelBlogPostBtn').addEventListener('click', hideBlogPostForm);
+            
+            document.getElementById('blogPostForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Collect form data
+                const postId = document.getElementById('blogPostId').value;
+                const post = {
+                    title: document.getElementById('blogPostTitle').value,
+                    excerpt: document.getElementById('blogPostExcerpt').value,
+                    content: document.getElementById('blogPostContent').value,
+                    author: document.getElementById('blogPostAuthor').value,
+                    category: document.getElementById('blogPostCategory').value,
+                    date: document.getElementById('blogPostDate').value
+                };
+                
+                try {
+                    if (postId) {
+                        // Update existing post
+                        post.id = parseInt(postId);
+                        updateBlogPost(post);
+                        showNotification('blogNotification', 'Статья успешно обновлена', 'success');
+                    } else {
+                        // Add new post
+                        addBlogPost(post);
+                        showNotification('blogNotification', 'Статья успешно добавлена', 'success');
+                    }
+                    
+                    // Refresh list and hide form
+                    renderBlogPostsList();
+                    hideBlogPostForm();
+                } catch (error) {
+                    showNotification('blogNotification', 'Ошибка при сохранении статьи: ' + error.message, 'error');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
