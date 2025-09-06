@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}Курсы Яндекс.Практикум - TBYA.RU{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="section-header">
+        <h1 class="section-title">Курсы Яндекс.Практикум</h1>
+        <p class="section-subtitle">Выберите интересующий вас курс</p>
+    </div>
+    
+    <!-- Filters -->
+    <div class="filters">
+        <form method="get">
+            <div class="filter-group">
+                <label for="tags">Теги:</label>
+                <select name="tags" id="tags" multiple>
+                    {% for tag in all_tags %}
+                    <option value="{{ tag.id }}" {% if tag.id in selected_tags %}selected{% endif %}>{{ tag.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Применить фильтры</button>
+        </form>
+    </div>
+    
+    <!-- Course Listings -->
+    <div class="courses-list">
+        {% for course in page_obj %}
+        <div class="card course-item">
+            <h3>{{ course.title }}</h3>
+            <p class="provider-name">Яндекс Практикум</p>
+            
+            <div class="course-meta">
+                <span class="badge badge-primary">{{ course.duration }}</span>
+                <span class="badge badge-success">{{ course.price }}</span>
+            </div>
+            
+            <a href="{{ course.get_absolute_url }}" class="btn btn-primary btn-sm">
+                Подробнее
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Pagination -->
+    {% if page_obj.has_other_pages %}
+    <div class="pagination">
+        <span class="page-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; Первая</a>
+                <a href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
+            {% endif %}
+            
+            <span class="current">
+                Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+            </span>
+            
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">Следующая</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">Последняя &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

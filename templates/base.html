@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Карьерно-образовательный портал Т-Банк и Яндекс.Практикум{% endblock %}</title>
+    <meta name="description" content="{% block description %}Платформа для поиска работы в Т-Банке и обучения в Яндекс.Практикуме{% endblock %}">
+    
+    <!-- CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="{% url 'home' %}" class="logo">TBYA.RU</a>
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="{% url 'home' %}" class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">Главная</a></li>
+                        <li><a href="{% url 'jobs:job_list' %}" class="nav-link {% if 'jobs' in request.resolver_match.app_names %}active{% endif %}">Вакансии</a></li>
+                        <li><a href="{% url 'courses:course_list' %}" class="nav-link {% if 'courses' in request.resolver_match.app_names %}active{% endif %}">Курсы</a></li>
+                        <li><a href="{% url 'blog:post_list' %}" class="nav-link {% if 'blog' in request.resolver_match.app_names %}active{% endif %}">Блог</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>TBYA.RU</h3>
+                    <p>Ваш надёжный партнёр в поиске работы и профессиональном развитии</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Для соискателей</h3>
+                    <ul class="footer-links">
+                        <li><a href="{% url 'jobs:job_list' %}">Поиск вакансий</a></li>
+                        <li><a href="#">Резюме</a></li>
+                        <li><a href="#">Карьерные советы</a></li>
+                        <li><a href="{% url 'courses:course_list' %}">Курсы</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Для работодателей</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Разместить вакансию</a></li>
+                        <li><a href="#">Поиск кандидатов</a></li>
+                        <li><a href="#">Корпоративное обучение</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Помощь</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Поддержка</a></li>
+                        <li><a href="#">Контакты</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 TBYA.RU. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="/static/js/main.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ job.title }} - TBYA.RU{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="job-details-section">
+        <h1>{{ job.title }}</h1>
+        <p class="company-name">Т-Банк</p>
+        
+        <div class="job-meta">
+            <span class="badge badge-primary">{{ job.location }}</span>
+            <span class="badge badge-success">{{ job.salary }}</span>
+        </div>
+        
+        <div class="job-description">
+            <h2>Описание вакансии</h2>
+            <p>{{ job.description }}</p>
+        </div>
+        
+        <a href="{{ job.external_url }}" class="btn btn-primary apply-btn" target="_blank">
+            Откликнуться на вакансию
+        </a>
+    </div>
+    
+    {% if recommended_courses %}
+    <div class="course-recommendation">
+        <h2>Рекомендованные курсы для подготовки</h2>
+        {% for course in recommended_courses %}
+        <div class="card course-card">
+            <h3>{{ course.title }}</h3>
+            <p class="provider-name">Яндекс Практикум</p>
+            
+            <div class="course-meta">
+                <span class="badge badge-success">{{ course.price }}</span>
+                <span class="badge badge-primary">{{ course.duration }}</span>
+            </div>
+            
+            <div class="course-description">
+                <p>{{ course.description }}</p>
+            </div>
+            
+            <a href="{{ course.external_url }}" class="btn btn-secondary enroll-btn" target="_blank">
+                Записаться на курс
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

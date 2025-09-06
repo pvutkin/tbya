@@ -673,11 +673,11 @@
                         <li><a href="#">Контакты</a></li>
                     </ul>
                 </div>
+            </div>
             <div class="footer-bottom">
                 <p>&copy; 2025 TBYA.RU. Все права защищены.</p>
             </div>
         </div>
-    </footer>
 
     <script>
         // Data storage using localStorage
@@ -1124,10 +1124,6 @@ function loadJobs() {
 function loadMoreJobs() {
     loadJobs();
 }
-        // Function to load more jobs
-        function loadMoreJobs() {
-            loadJobs();
-        }
 
         // Function to calculate weighted course relevance score
         function calculateWeightedCourseRelevance(job, course) {
@@ -1156,7 +1152,7 @@ function loadMoreJobs() {
             
             // Duration match (5 points for courses 6-12 months)
             if (course.duration) {
-                const durationMonths = parseInt(course.duration);
+                const durationMonths = parseInt(course.duration) || 0;
                 if (durationMonths >= 6 && durationMonths <= 12) {
                     score += 5;
                 }
@@ -1200,7 +1196,7 @@ function loadMoreJobs() {
             
             // Duration match (5 points for courses 6-12 months)
             if (course.duration) {
-                const durationMonths = parseInt(course.duration);
+                const durationMonths = parseInt(course.duration) || 0;
                 if (durationMonths >= 6 && durationMonths <= 12) {
                     score += 5;
                 }
@@ -1469,14 +1465,8 @@ function loadMoreJobs() {
             // Add event listener for load more jobs button
             document.getElementById('loadMoreJobsBtn').addEventListener('click', loadMoreJobs);
             
-            // Add event listener for load more button
-            document.getElementById('loadMoreBtn').addEventListener('click', loadMoreJobs);
-            
             // Add event listener for load more blog posts button
             document.getElementById('loadMoreBlogBtn').addEventListener('click', loadMoreBlogPosts);
-            
-            // Add event listener for load more container button
-            document.getElementById('loadMoreContainer').addEventListener('click', loadMoreJobs);
         });
     </script>
 </body>

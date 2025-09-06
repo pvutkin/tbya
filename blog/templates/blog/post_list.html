@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Блог - TBYA.RU{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="section-header">
+        <h1 class="section-title">Блог</h1>
+        <p class="section-subtitle">Полезные статьи для вашей карьеры</p>
+    </div>
+    
+    <!-- Blog Posts -->
+    <div class="blog-posts">
+        {% for post in page_obj %}
+        <div class="card blog-post">
+            <h3>{{ post.title }}</h3>
+            <p>{{ post.excerpt }}</p>
+            <div class="blog-meta">
+                <span class="blog-date">{{ post.published_at|date:"d.m.Y" }}</span>
+            </div>
+            <a href="{{ post.get_absolute_url }}" class="btn btn-primary btn-sm">Читать далее</a>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Pagination -->
+    {% if page_obj.has_other_pages %}
+    <div class="pagination">
+        <span class="page-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; Первая</a>
+                <a href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
+            {% endif %}
+            
+            <span class="current">
+                Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+            </span>
+            
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">Следующая</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">Последняя &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

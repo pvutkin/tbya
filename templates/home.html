@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block title %}Работа + Обучение - TBYA.RU{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <h1>Работа + Обучение</h1>
+            <p>Найдите вакансию в Т-Банке и пройдите курс для подготовки от Яндекс Практикума</p>
+        </div>
+    </div>
+</section>
+
+<!-- Hot Jobs Ticker -->
+<section class="hot-ticker">
+    <div class="container">
+        <div class="ticker-header">
+            <span class="fire-icon">🔥</span>
+            <span class="ticker-title">Горящие вакансии:</span>
+        </div>
+        <div class="ticker-content">
+            <div class="ticker-items" id="hotJobsTicker">
+                {% for job in latest_jobs %}
+                <div class="ticker-item">
+                    <a href="{{ job.get_absolute_url }}" class="hot-job-link">
+                        {{ job.title }} в {{ job.company }}
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Main Content Section -->
+<section class="main-content">
+    <div class="container">
+        <div class="content-layout">
+            <!-- Left Column - Latest Jobs -->
+            <div class="column left-column">
+                <div class="section-header">
+                    <h2 class="section-title">Актуальные вакансии</h2>
+                    <p class="section-subtitle">Выберите интересующую вас позицию</p>
+                </div>
+                
+                <div class="jobs-list">
+                    {% for job in latest_jobs %}
+                    <div class="card job-item">
+                        <h3>{{ job.title }}</h3>
+                        <p class="company-name">Т-Банк</p>
+                        
+                        <div class="job-meta">
+                            <span class="badge badge-primary">{{ job.location }}</span>
+                            <span class="badge badge-success">{{ job.salary }}</span>
+                            {% if job.hot %}
+                            <span class="badge badge-warning" style="margin-left: var(--space-xs);">🔥 Горящая</span>
+                            {% endif %}
+                        </div>
+                        
+                        <a href="{{ job.get_absolute_url }}" class="btn btn-primary btn-sm">
+                            Подробнее
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="text-center" style="margin-top: 2rem;">
+                    <a href="{% url 'jobs:job_list' %}" class="btn btn-secondary">Смотреть все вакансии</a>
+                </div>
+            </div>
+            
+            <!-- Right Column - Popular Courses -->
+            <div class="column right-column">
+                <div class="section-header">
+                    <h2 class="section-title">Популярные курсы</h2>
+                    <p class="section-subtitle">Рекомендованные программы обучения</p>
+                </div>
+                
+                <div class="courses-list">
+                    {% for course in popular_courses %}
+                    <div class="card course-item">
+                        <h3>{{ course.title }}</h3>
+                        <p class="provider-name">Яндекс Практикум</p>
+                        
+                        <div class="course-meta">
+                            <span class="badge badge-primary">{{ course.duration }}</span>
+                            <span class="badge badge-success">{{ course.price }}</span>
+                        </div>
+                        
+                        <a href="{{ course.get_absolute_url }}" class="btn btn-primary btn-sm">
+                            Подробнее
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="text-center" style="margin-top: 2rem;">
+                    <a href="{% url 'courses:course_list' %}" class="btn btn-secondary">Смотреть все курсы</a>
+                </div>
+            </div>
+        
+        <!-- Blog Section -->
+        <section class="blog-section">
+            <div class="section-header">
+                <h2 class="section-title">Блог</h2>
+                <p class="section-subtitle">Полезные статьи для вашей карьеры</p>
+            </div>
+            
+            <div class="blog-posts">
+                {% for post in latest_posts %}
+                <div class="card blog-post">
+                    <h3>{{ post.title }}</h3>
+                    <p>{{ post.excerpt }}</p>
+                    <div class="blog-meta">
+                        <span class="blog-author">{{ post.author }}</span>
+                        <span class="blog-date">{{ post.date }}</span>
+                    </div>
+                    <a href="{{ post.get_absolute_url }}" class="btn btn-primary btn-sm">Читать далее</a>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <div class="text-center" style="margin-top: 2rem;">
+                <a href="{% url 'blog:post_list' %}" class="btn btn-secondary">Смотреть все статьи</a>
+            </div>
+        </section>
+    </div>
+</section>
+{% endblock %}

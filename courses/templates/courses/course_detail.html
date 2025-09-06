@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ course.title }} - TBYA.RU{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="course-details-section">
+        <h1>{{ course.title }}</h1>
+        <p class="provider-name">Яндекс Практикум</p>
+        
+        <div class="course-meta">
+            <span class="badge badge-primary">{{ course.duration }}</span>
+            <span class="badge badge-success">{{ course.price }}</span>
+        </div>
+        
+        <div class="course-description">
+            <h2>Описание курса</h2>
+            <p>{{ course.description }}</p>
+        </div>
+        
+        <a href="{{ course.external_url }}" class="btn btn-primary enroll-btn" target="_blank">
+            Записаться на курс
+        </a>
+    </div>
+</div>
+{% endblock %}
